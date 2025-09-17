@@ -7,6 +7,7 @@ function Sidebar() {
   const departments = [
     {name: 'Administration', url: '/department/Administration'},
     {name: 'Management', url: '/department/Management'},
+    {name: 'Department', url: '/component/Department'},
     {name: 'Studio', url: '/department/Studio'},
     {name: 'Warehouse', url: '/department/Warehouse'},
     {name: 'Workshop', url: '/department/Workshop'}
@@ -39,7 +40,7 @@ function Sidebar() {
         </NavLink>
 
         <NavLink 
-          to="/status" 
+          to="/p/project-status" 
           className={({ isActive }) => 
             `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive ? 'bg-blue-700 text-white' : 'text-gray-300 hover:bg-gray-800'}`
           }
@@ -49,7 +50,7 @@ function Sidebar() {
         </NavLink>
 
         <NavLink 
-          to="/completed-tasks" 
+          to="/p/completed-projects" 
           className={({ isActive }) => 
             `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive ? 'bg-blue-700 text-white' : 'text-gray-300 hover:bg-gray-800'}`
           }
@@ -58,7 +59,6 @@ function Sidebar() {
           <span>COMPLETED TASKS</span>
         </NavLink>
 
-        {/* Departments Dropdown */}
         <div className='relative'>
           <button
             onClick={() => setDeptOpen(!deptOpen)}

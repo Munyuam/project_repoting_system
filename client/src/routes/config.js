@@ -1,4 +1,3 @@
-// import Home from "../Home";
 import Login from "../Login"
 import Administration from "../department/Administration";
 import Management from "../department/Management";
@@ -7,7 +6,10 @@ import Warehouse from "../department/Warehouse";
 import Workshop from "../department/Workshop";
 import Notfound from "../errors/Notfound";
 import ServerError from "../errors/ServerError";
-
+import Addproject from "../components/Addproject";
+import DisplayProjects from "../components/DisplayProjects";
+import ProjectStatus from "../components/ProjectStatus";
+import CompletedProjects from "../components/CompletedProjects";
 
 const routes = [
     {
@@ -18,10 +20,10 @@ const routes = [
         path : '/Login',
         component : <Login/>
     },
-     {
+    {
         path : '/department/Administration',
         component : <Administration/>
-    }, 
+    },
      {
         path : '/department/Management',
         component : <Management/>
@@ -39,8 +41,20 @@ const routes = [
         component : <Workshop/>
     },
     {
-        path : '/completed-tasks',
-        component : <Workshop/>
+        path : '/p/addproject',
+        component : <Addproject/>
+    },
+    {
+        path : '/p/projects',
+        component : <DisplayProjects/>
+    },
+    {
+        path : '/p/completed-projects',
+        component : <CompletedProjects/>
+    },
+    {
+        path : '/p/project-status',
+        component : <ProjectStatus/>
     },
      {
         path : '/pendings',

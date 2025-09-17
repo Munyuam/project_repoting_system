@@ -2,13 +2,25 @@ import React from "react";
 
 const Dboard = () => {
 
+  const locator = {
+      addProject: ()=>{
+        window.location.href = '/p/addproject'
+      },
+      getProjects: ()=>{
+        window.location.href = '/p/projects'
+      },
+      getCompleted_projects: ()=>{
+        window.location.href = '/p/completed-projects'
+      },
+      getProject_status : ()=>{
+        window.location.href = '/p/project-status'
+      }
+  }
+
   return (
     <div className="ml-64 flex min-h-screen bg-gray-50">
       <div className="flex-1 overflow-auto">
         <div className="p-6">
-             <div className='w-full border border-none p-5'>
-                    <h1 className='text-5xl text-black mb-2 uppercase'><span className='font-bold'>HELLO!</span> Welcome Mwiza</h1>
-                </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
             <div className="bg-white rounded-lg shadow p-6">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
@@ -16,7 +28,9 @@ const Dboard = () => {
               </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">ADD NEW PROJECT</h3>
                 <p className="text-gray-600 mb-4">Create and submit new projects for approval</p>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm">
+                <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
+                    onClick={locator.addProject} 
+                >
                     Add Project
                 </button>
             </div>
@@ -27,7 +41,9 @@ const Dboard = () => {
               </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">VIEW PROJECTS</h3>
                 <p className="text-gray-600 mb-4">Monitor all project statuses and details</p>
-                <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm">
+                <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
+                  onClick={locator.getProjects}
+                >
                     View All
                 </button>
             </div>
@@ -38,7 +54,9 @@ const Dboard = () => {
               </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">PROJECT STATUS</h3>
                 <p className="text-gray-600 mb-4">Track progress of all projects</p>
-                <button className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-md text-sm">
+                <button className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-md text-sm"
+                  onClick={locator.getProject_status}
+                >
                     Check Status
                 </button>
             </div>
@@ -49,7 +67,9 @@ const Dboard = () => {
               </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">COMPLETED PROJECTS</h3>
                 <p className="text-gray-600 mb-4">View all completed projects</p>
-                <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm">
+                <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm"
+                  onClick={locator.getCompleted_projects}
+                >
                     View Completed
                 </button>
             </div>

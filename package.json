@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "body-parser": "^2.2.0"
+    "body-parser": "^2.2.0",
+    "react-spinners": "^0.17.0"
   }
 }
