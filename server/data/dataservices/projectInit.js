@@ -60,8 +60,6 @@ const InitialiseProject = async (formData, userId) => {
                                         prepared_by, 
                                         total_charge
                                     ]);
-            
-
         if(result.affectedRows > 0){
                 const assignedTo = 2;
                 const job_status = 'pending';

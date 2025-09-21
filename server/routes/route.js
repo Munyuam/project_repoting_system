@@ -3,7 +3,10 @@ import loginDetails from "../data/dataservices/getLogin.js";
 import CreateProject from "../data/dataservices/projectInit.js";
 import loadProjects from "../data/dataservices/getProjects.js";
 import statuses from "../data/dataservices/getProjectStatus.js";
-import { useId } from "react";
+import approveProject from "../data/dataservices/approveProject.js";
+import rejectProject from "../data/dataservices/rejectProject.js";
+import getusers from "../data/dataservices/getUsers.js";
+import registerUser from "../data/dataservices/registerUser.js";
 
 const router = Router();
 
@@ -11,11 +14,6 @@ router.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-router.get("/api", (req, res) => {
-  res.json({
-    data: [{ id: 500, name: "This site is under construction" }],
-  });
-});
 
 router.post("/login", async (req, res) => {    
     if (!req.body || typeof req.body !== 'object') {
@@ -115,6 +113,63 @@ router.get('/Management', async (req, res) => {
     });
 });
 
+router.post('/approvProject', async (req, res) => {
+  try {
+    const { projectId, jobCard } = req.body;
+
+    if (!projectId || !jobCard) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid data received"
+      });
+    }
+
+    const approvedProjects = await approveProject(jobCard);
+
+    if (approvedProjects.success) {
+      res.json(approvedProjects);
+    } else {
+      res.status(404).json(approvedProjects);
+    }
+  } catch (error) {
+    console.error("Error approving project:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while approving project"
+    });
+  }
+});
+
+router.post('/rejectProject', async (req, res)=>{
+
+    try {
+        const { projectId, jobCard } = req.body;
+
+        if (!projectId || !jobCard) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid data received"
+        });
+        }
+
+        const rejected =  await rejectProject(jobCard);
+        
+        if(rejected.success){
+            res.json(rejected);
+        } else {
+        res.status(404).json(rejected);
+        }
+
+    } catch (error) {
+        console.error("Error approving project:", error);
+        res.status(500).json({
+        success: false,
+        message: "Server error while approving project"
+        });
+    }
+});
+
+
 router.post('/projectInit', async (req, res) => {
     if (!req.body || typeof req.body !== 'object') {
         return res.status(400).json({ success: false, message: "Invalid data received" });
@@ -172,6 +227,81 @@ router.get('/getProjectStatus', async (req, res) => {
         res.status(500).json({ error: 'Failed to load statuses' });
     }
 });
+
+
+router.get("/getUsers", async (req, res) => {
+  try {
+    const users = await getusers();
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ error: "Failed to load users" });
+  }
+});
+
+
+router.post('/registerUser', async (req, res) => {
+    if (!req.body || typeof req.body !== 'object') {
+        return res.status(400).json({ error: "Invalid request format" });
+    }
+
+    const { username, fullName, email, role } = req.body;
+    
+    console.log(req.body);
+    console.log(role)
+
+    const generatePassword = (username, fullname) => {
+        let pass = "";
+        if (typeof username === "string" && typeof fullname === "string") {
+            let userPlaceholder = username[0] || "";
+            let namePlaceholder = fullname[0] || "";
+            pass = userPlaceholder + namePlaceholder + new Date().getFullYear();
+        }
+        return pass;
+    };
+
+    const password = generatePassword(username, fullName);
+
+    try {
+        const registered = await registerUser(role, username, fullName, email, password);            
+        console.log(registered);
+        res.status(201).json({ message: "User registered successfully", result: registered });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+router.get('/Admin', async (req, res) => {
+    const userID = req.session.userid;
+    const userDepartment = req.session.department_name; 
+    const username = req.session.username;
+
+    if(!userID){
+        return res.status(401).json({
+            error: "Access to this Resource is Restricted. Please Login",
+            sessionData: req.session 
+        });
+    }
+
+    if(userDepartment !== 'Administration'){
+        return res.status(403).json({
+            error: "Access to this Resource is Restricted to Administrators only",
+            sessionData: req.session
+        });
+    }
+
+    res.json({
+        success: true,
+        sessionData: req.session,
+        data: {
+            name: 'mwizssajaskj',
+            dob: '21-09-2020'
+        }
+    });
+
+});
+
 
 router.get('/Warehouse', async (req, res) => { 
     res.send("Warehouse route");

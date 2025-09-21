@@ -1,10 +1,7 @@
 import pool from "../dbconnector.js";
 
 const loadProjects = async () => {
-  const sql = `
-    SELECT projectID, userID, jobCardNo, jobDetails, clientContactName, totalCharge 
-    FROM projects
-  `;
+  const sql = `SELECT * FROM projects`;
   const [projects] = await pool.query(sql);
 
   if (projects.length === 0) {
@@ -12,21 +9,17 @@ const loadProjects = async () => {
   }
 
   const allProjects = [];
+  const dropped = "dropped";
 
   for (const project of projects) {
-    const taskSql = "SELECT * FROM projectTasks WHERE jobCardNo = ?";
-    const [tasks] = await pool.query(taskSql, [project.jobCardNo]);
+    const taskSql = "SELECT * FROM projectTasks WHERE jobCardNo = ? AND status != ? AND assignedTo != ?";
+    const [tasks] = await pool.query(taskSql, [project.jobCardNo, dropped, -1]);
 
     if (tasks.length === 0) {
       allProjects.push({
-        projectId: project.projectID,
-        userId: project.userID,
-        jobCardNo: project.jobCardNo,
-        jobDetails: project.jobDetails,
-        clientName: project.clientContactName,
-        totalCharge: project.totalCharge,
+        ...project, 
         taskId: null,
-        projectStatus: "No tasks",
+        projectStatus: "Notasks",
         taskName: null,
         assignedTo: null,
         departmentName: null,
@@ -47,17 +40,12 @@ const loadProjects = async () => {
     }
 
     allProjects.push({
-      projectId: project.projectID,
-      userId: project.userID,
-      jobCardNo: project.jobCardNo,
-      jobDetails: project.jobDetails,
-      clientName: project.clientContactName,
-      totalCharge: project.totalCharge,
+      ...project,
       taskId: task.taskID,
       projectStatus: task.status,
       taskName: task.taskName,
       assignedTo: task.assignedTo,
-      departmentName: departmentName,
+      departmentName,
     });
   }
 

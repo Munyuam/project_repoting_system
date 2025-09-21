@@ -5,9 +5,9 @@ function Sidebar() {
   const [deptOpen, setDeptOpen] = useState(false);
 
   const departments = [
+    {name: 'Departments', url: '/departments/all'},
     {name: 'Administration', url: '/department/Administration'},
     {name: 'Management', url: '/department/Management'},
-    {name: 'Department', url: '/component/Department'},
     {name: 'Studio', url: '/department/Studio'},
     {name: 'Warehouse', url: '/department/Warehouse'},
     {name: 'Workshop', url: '/department/Workshop'}

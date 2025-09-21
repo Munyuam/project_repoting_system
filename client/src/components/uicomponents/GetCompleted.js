@@ -15,7 +15,7 @@ function GetCompleted() {
         const data = await response.json();
 
         const completedProjects = Array.isArray(data)
-          ? data.filter(item => item.status?.toLowerCase() === 'completed')
+          ? data.filter(item => item.projectStatus?.toLowerCase() === 'completed')
           : [];
 
         setcompleted(completedProjects);
@@ -42,18 +42,18 @@ function GetCompleted() {
           <div key={index} className="bg-white my-6 rounded-xl shadow-md p-6 flex flex-col md:flex-row md:justify-between md:items-start">
             <div className="flex-1 md:pr-8">
               <h2 className="text-lg font-semibold">{item.jobDetails}</h2>
-              <p className="text-sm text-gray-500">Client: {item.clientContactName}</p>
+              <p className="text-sm text-gray-500">Client: {item.clientName}</p>
               <p className="text-sm text-gray-500">
                 Job Card: <span className="font-medium">{item.jobCardNo}</span>
               </p>
               <p className="text-sm text-gray-500">Prepared by: {item.preparedBy}</p>
-              <p className="text-sm text-gray-500">Due: {dateFormat(item.deliveryDate)}</p>
+              <p className="text-sm text-gray-500">Due: {dateFormat(item.deiveryDate)}</p>
 
               <div className="mt-6 w-full">
                 <p className="text-sm font-medium text-gray-700 mb-1">Progress</p>
                 <ProgressBar
-                  completed={getProgress(item.status)}
-                  bgColor="#6366F1"
+                  completed={getProgress(item.projectStatus)}
+                  bgColor="#5FBF50"
                   height="20px"
                   width="100%"
                   className="w-full"
@@ -63,10 +63,9 @@ function GetCompleted() {
 
             <div className="flex flex-col items-end mt-4 md:mt-0">
               <span className="text-xs px-3 py-1 bg-indigo-100 text-indigo-600 rounded-full mb-2">
-                {getStageName(item.status)}
+                {getStageName(item.projectStatus)}
               </span>
               <p className="text-gray-800 font-semibold">MWK: {Math.floor(item.totalCharge)}</p>
-              <p className="text-sm text-gray-500">Current: {item.departmentName}</p>
             </div>
           </div>
         ))

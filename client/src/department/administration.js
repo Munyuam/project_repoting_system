@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
-import Dboard from '../components/Dboard';
+import AdminDashBoard from '../components/AdminDashBoard';
+
 import 'notyf/notyf.min.css';
 
 function Administration() { 
@@ -93,8 +94,7 @@ function Administration() {
               <h1 className='text-4xl text-black mb-2 uppercase'><span className='font-bold'>HELLO!</span> Welcome {user}</h1>
           </div>
             )}
-        <Dboard />
-        
+        <AdminDashBoard />
       </div>
     </div>
   );

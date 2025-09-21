@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
-import Dboard from '../components/Dboard'
+import DeptDashboard from '../components/DeptDashboard'
 
 function Warehouse() {
   return (
@@ -9,7 +9,7 @@ function Warehouse() {
       <p>
         <Sidebar/>
         <Navbar/>
-        <Dboard/>
+        <DeptDashboard/>
       </p>
     </div>
   )

@@ -18,8 +18,10 @@ function GetProjectStatus() {
 
             if (response.ok) {
                 const statuses = await response.json();
-                setStatuses(statuses); 
-                console.log('Statuses loaded:', statuses);
+                const activeprojects = statuses.filter((item) => {
+                    return item.status !== "dropped"
+                })
+                setStatuses(activeprojects)
             } else {
                 notf.error(`Something broke while loading your statuses: ${response.status} ${response.statusText}`);
                 console.error(`Failed to load statuses: ${response.status} ${response.statusText}`);

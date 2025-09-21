@@ -16,8 +16,14 @@ function GetProjects() {
 
       if(response.ok) {
         const data = await response.json();
-        setProjects(data);
-        console.log("Connected to database correctly", data);
+
+
+        const activeprojects = data.filter((item) => {
+            if(item.assignedTo !== -1 && item.taskName !== null){
+              return item;
+            }
+        })
+        setProjects(activeprojects)
       } else {
         console.log("Error occurred while connecting to database");
       }
@@ -48,10 +54,10 @@ function GetProjects() {
       </div>
 
       {projects.length > 0 ? (
-        <div className="overflow-x-auto rounded-md">
+        <div className="overflow-x-auto shadow-md rounded-md">
           <table className="table-auto w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#F9FAFB]">
+              <tr className="bg-gray-100 font-thin">
                 <th className="px-4 py-2 text-gray-600">JOB DETAILS</th>
                 <th className="px-4 py-2 text-gray-600">CLIENT</th>
                 <th className="px-4 py-2 text-gray-600">STATUS</th>
@@ -64,7 +70,7 @@ function GetProjects() {
               {projects.map((item, index) => (
                 <tr key={index} className="text-[17px] border border-b-2 border-gray-50 hover:bg-gray-100 transition-colors duration-200">
                   <td className="px-4 py-2">{item.jobDetails}</td>
-                  <td className="px-4 py-2">{item.clientName}</td>
+                  <td className="px-4 py-2">{item.clientContactName}</td>
                   <td className="px-4 py-2">
                      <span 
                         className="px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"    

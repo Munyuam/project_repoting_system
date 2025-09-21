@@ -1,21 +1,7 @@
 import React from "react";
+import { locator } from "../utils/globalutils";
 
-const Dboard = () => {
-
-  const locator = {
-      addProject: ()=>{
-        window.location.href = '/p/addproject'
-      },
-      getProjects: ()=>{
-        window.location.href = '/p/projects'
-      },
-      getCompleted_projects: ()=>{
-        window.location.href = '/p/completed-projects'
-      },
-      getProject_status : ()=>{
-        window.location.href = '/p/project-status'
-      }
-  }
+const AdminDashBoard = () => {
 
   return (
     <div className="ml-64 flex min-h-screen bg-gray-50">
@@ -80,4 +66,4 @@ const Dboard = () => {
   );
 };
 
-export default Dboard;
+export default AdminDashBoard;

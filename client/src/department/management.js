@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from '../components/Sidebar'
 import Navbar from '../components/Navbar'
-import Ctrlboard from '../components/Ctrlboard'
+import ManagerDashBoard from '../components/ManagerDashboard'
 
 
 function Management() {
@@ -9,7 +9,7 @@ function Management() {
     <div>
       <Sidebar/>
       <Navbar/>
-      <Ctrlboard/>
+      <ManagerDashBoard/>
     </div>
   )
 }
