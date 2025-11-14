@@ -3,10 +3,12 @@ import { Notyf } from "notyf";
 import { getRole } from "../../utils/globalutils"; 
 import $ from "jquery";
 import "datatables.net-dt";
+import EditUser from "./EditUser";
 
 function GetUserManagement() {
   const notyf = new Notyf();
   const [users, setUsers] = useState([]);
+  const [editingUser, setEditingUser] = useState(null);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -31,7 +33,6 @@ function GetUserManagement() {
 
         notyf.success("User registered successfully");
         getUsers();
-
         setFormData({
           username: "",
           fullName: "",
@@ -60,6 +61,18 @@ function GetUserManagement() {
       notyf.error("Network Error: " + error.message);
     }
   };
+
+  const getStatusBg = (status) => {
+      if (!status || status.trim() === "") return "bg-gray-300"; 
+
+      const normalized = status.toLowerCase();
+
+      if (normalized === "active") return "bg-green-500 text-white";
+      if (normalized === "inactive") return "bg-red-500 text-white";
+
+      return "bg-gray-400 text-white"; 
+  };
+
 
   useEffect(() => {
     getUsers();
@@ -129,6 +142,7 @@ function GetUserManagement() {
             type="text"
             name="username"
             value={formData.username}
+            required
             onChange={handleChange}
             placeholder="Enter username"
             className="w-full border rounded-lg px-3 py-2"
@@ -138,6 +152,7 @@ function GetUserManagement() {
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
+            required
             placeholder="Enter full name"
             className="w-full border rounded-lg px-3 py-2"
           />
@@ -145,6 +160,7 @@ function GetUserManagement() {
             type="email"
             name="email"
             value={formData.email}
+            required
             onChange={handleChange}
             placeholder="Enter email address"
             className="w-full border rounded-lg px-3 py-2"
@@ -152,6 +168,7 @@ function GetUserManagement() {
           <select
             name="role"
             value={formData.role}
+            required
             onChange={handleChange}
             className="w-full border rounded-lg px-3 py-2"
           >
@@ -187,13 +204,14 @@ function GetUserManagement() {
               <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Role</th>
               <th className="px-4 py-3">Actions</th>
+              <th className="px-4 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user, i) => (
               <tr key={i} className="border-t">
-                <td className="px-4 py-3 font-medium">{user.username}</td>
-                <td className="px-4 py-3">{user.fullName}</td>
+                <td className="px-4 py-3 font-medium capitalize">{user.username}</td>
+                <td className="px-4 py-3 capitalize">{user.fullName}</td>
                 <td className="px-4 py-3">{user.email}</td>
                 <td className="px-4 py-3">
                   <span
@@ -205,12 +223,30 @@ function GetUserManagement() {
                     {getRole(user.departmentName)}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-sm text-gray-600">System User</td>
+                <td className="px-4 py-3 text-sm text-white">
+                 <button
+                      onClick={() => setEditingUser(user)}
+                      className="bg-gray-500 text-white px-4 py-2 rounded-md capitalize"
+                    >
+                      Edit
+                  </button>                
+                  </td>
+                    <td className={`px-4 py-3 text-sm capitalize ${getStatusBg(user.status)}`}>
+                    {user.status || "Invalid"}
+                  </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      
+      {editingUser && (
+        <EditUser
+          user={editingUser}
+          onClose={() => setEditingUser(null)}
+          onUpdate={getUsers}
+        />
+      )}
     </div>
   );
 }

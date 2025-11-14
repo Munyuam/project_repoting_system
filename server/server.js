@@ -3,11 +3,9 @@ import route from "./routes/route.js";
 import session from "express-session";
 import dotenv from "dotenv";
 import cors from 'cors';
-
 dotenv.config();
 
 const port = process.env.PORT;
-
 const app = express();
 
 app.use(express.json());

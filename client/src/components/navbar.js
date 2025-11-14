@@ -1,17 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileCard from './uicomponents/profileCard';
 import NotificationCard from './uicomponents/NotificationsCard';
 import SettingsCard from './uicomponents/settingsCard';
+import { session } from "../utils/globalutils";
 
 function Navbar({ hasSidebar = true }) {
   const [showProfile, setShowProfile] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  const notifications = [
-    { title: "New Project Assigned", message: "A new job card has been added", time: "1h ago", icon: "bx-briefcase" },
-    { title: "Update Required", message: "Please update task status", time: "3h ago", icon: "bx-task" }
-  ];
+  const [notifications, setNotifications] = useState([]); 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchNotifications() {
+      try {
+        const sess = await session();
+        if (!sess.departmentId) return;
+
+        const response = await fetch("/getNotifications");
+        const data = await response.json();
+
+        if (data.success) {
+          const formatted = data.notifications.map(n => ({
+            notificationID: n.notificationID,
+            title: n.notificationTitle,
+            message: n.notificationMessage,
+            read: n.read || false,
+          }));
+
+          setNotifications(formatted);
+        } else {
+          setNotifications([]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch notifications:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchNotifications();
+  }, []);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <>
@@ -20,6 +52,7 @@ function Navbar({ hasSidebar = true }) {
         ${hasSidebar ? "ml-64" : "ml-0 w-full"}`}
       >
         <div className="flex justify-end items-center space-x-2 sm:space-x-4">
+
           <button
             className="text-gray-600 hover:text-gray-900 hover:bg-gray-100 p-2 rounded-lg transition-colors"
             onClick={() => {
@@ -40,7 +73,10 @@ function Navbar({ hasSidebar = true }) {
             }}
           >
             <i className="bx bx-bell bx-sm"></i>
-            <span className="absolute top-1 right-1 bg-red-500 w-2 h-2 rounded-full"></span>
+
+            {unreadCount > 0 && (
+              <span className="absolute top-1 right-1 bg-red-500 w-2 h-2 rounded-full"></span>
+            )}
           </button>
 
           <button
@@ -57,7 +93,7 @@ function Navbar({ hasSidebar = true }) {
       </div>
 
       {showProfile && <ProfileCard onClose={() => setShowProfile(false)} />}
-      {showNotifications && <NotificationCard notifications={notifications} onClose={() => setShowNotifications(false)} />}
+      {showNotifications && <NotificationCard onClose={() => setShowNotifications(false)} />}
       {showSettings && <SettingsCard onClose={() => setShowSettings(false)} />}
     </>
   );

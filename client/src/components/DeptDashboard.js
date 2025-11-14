@@ -64,8 +64,8 @@ function DeptDashboard() {
         {
           title: 'ASSIGNED PROJECTS',
           description: 'View projects assigned to Studio',
-          icon: 'bx-task',
-          color: 'pink',
+          icon: 'bxr  bx-desk',
+          color: 'amber',
           onClick: locator.getAssignedProjects,
           ariaLabel: 'View assigned Studio projects',
           btnTitle: 'Assigned Projects'

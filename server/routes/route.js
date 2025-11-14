@@ -10,6 +10,10 @@ import getusers from "../data/dataservices/getUsers.js";
 import registerUser from "../data/dataservices/registerUser.js";
 import UpdateStatus from "../data/dataservices/updatstatus.js";
 import updateProfile from "../data/dataservices/updateProfile.js";
+import changePassword from "../data/dataservices/changePassword.js";
+import resetPassword from "../data/dataservices/resetPassword.js";
+import getNotification from "../notiifications/services/getNotifications.js";
+import pool from '../data/dbconnector.js'
 
 const router = Router();
 
@@ -526,44 +530,32 @@ router.get('/geturl', async (req, res,next) => {
 })
 
 router.post('/updateProfile', async (req, res) => {
-  const { username, email, departmentName, userId } = req.body;
 
-  if (!username || !email || !departmentName || !userId) {
-    console.log('Missing fields:', req.body);
-    return res.status(400).json({
-      success: false,
-      message: 'All fields are required.',
-    });
+    console.log("Request Body: ",req.body);
+
+  const { username, email, departmentName, userId, status, fullName } = req.body;
+
+  if (!username || !email || !departmentName || !userId || !status) {
+    return res.status(400).json({ success: false, message: 'All fields are required.' });
   }
 
-  console.log(req.body);
-
   try {
-    const updatedProfile = await updateProfile(username, email, departmentName, userId);
+    const updatedProfile = await updateProfile(username, email, departmentName, userId, status, fullName);
 
-    if (updatedProfile) {
-      console.log('Profile updated successfully:', updatedProfile);
+    if (updatedProfile.success) {
       return res.json({
         success: true,
-        message: 'Profile updated successfully.',
-        user: updatedProfile,
+        message: updatedProfile.message,
+        user: updatedProfile.user,
       });
     } else {
-      console.log('Profile not found.');
-      return res.status(404).json({
-        success: false,
-        message: 'User not found.',
-      });
+      return res.status(400).json({ success: false, message: updatedProfile.message });
     }
   } catch (error) {
     console.error('Error updating profile:', error.message);
-    return res.status(500).json({
-      success: false,
-      message: 'Something occurred while updating the profile.',
-    });
+    return res.status(500).json({ success: false, message: 'Internal server error.' });
   }
-}); 
-
+});
 
 router.get('/getSession', (req, res)=>{
     if(!req.session){
@@ -581,6 +573,97 @@ router.get('/getSession', (req, res)=>{
         })
     }
 })
+
+router.post("/changePassword", async (req, res) => {
+  if (!req.session || !req.session.userid) {
+    return res.status(401).json({ success: false, message: "Not logged in" });
+  }
+
+  const { oldPassword, newPassword } = req.body;
+  const userID = req.session.userid;
+
+  try {
+    const result = await changePassword(userID, newPassword, oldPassword);
+    res.json(result);
+  } catch (error) {
+    console.error("Error changing password:", error.message);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+router.get('/getNotifications', async (req, res)=>{
+    if(!req.session || !req.session.departId ){
+        return res.status(401).json({ success: false, message: "Not logged in" });
+    }
+
+    const departmentID = req.session.departId
+    console.log("the found departmentID is: "+departmentID)
+
+    try {
+        const notifications = await getNotification(departmentID);
+
+        if(notifications.success){
+        
+            console.log("Notifications successfully retrieved");
+
+            return res.json({
+                success: true,
+                message: notifications.message,
+                notifications: notifications.notifications
+            })
+        }else{
+            return res.json({ success: false, message: notifications.message || "Failed to get notifications for this department" });
+        }
+    } catch (error) {
+            console.error("Error retrieving notifications: ", error.message);
+            return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+
+})
+
+router.post('/markAsRead', async (req, res) => {
+  const { notificationID } = req.body;
+  try {
+    await pool.query("UPDATE notifications SET isRead = 1 WHERE ID = ?", [notificationID]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+
+router.post('/markAllAsRead', async (req, res) => {
+  const { departmentID } = req.body;
+  try {
+    await pool.query("UPDATE notifications SET isRead = 1 WHERE targetDepartment = ?", [departmentID]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+
+router.post('/resetPassword', async (req, res) => {
+  if (!req.session || !req.session.userid) {
+    return res.status(401).json({ success: false, message: "Not logged in" });
+  }
+
+  const { userID, defaultPassword } = req.body;
+
+  try {
+    const result = await resetPassword(userID, defaultPassword);
+
+    if (result.success) {
+      return res.json({ success: true, message: result.message });
+    } else {
+      return res.json({ success: false, message: result.message || "Failed to reset password" });
+    }
+  } catch (error) {
+    console.error("Error changing password:", error.message);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
 
 router.get('/logout', async (req, res,next) => { 
     if(req.session){    

@@ -1,13 +1,14 @@
+import sendNotificationToDepartments from "../../notiifications/services/projectNotification.js";
 import pool from "../dbconnector.js";
 
 const InitialiseProject = async (formData, userId) => {
 
     const taskName = ()=>{
 
-        let tname  = "job_task";
-        let hexs = "123456789ABCDEF";
+        let tname  = "JOB";
+        let hexs = "1234ABC";
 
-        for(let i = 0; i < hexs.length ; i ++){
+        for(let i = 0; i < 5 ; i ++){
             tname += hexs[Math.floor(Math.random() * hexs.length)]; 
         }
 
@@ -69,6 +70,11 @@ const InitialiseProject = async (formData, userId) => {
                     const [task_result_set]=  await pool.query(create_task_sql, [job_card_no, taskName(), assignedTo, job_status]);
 
                     if(task_result_set.affectedRows > 0){
+                        const title = "New Project Assigned";
+                        const message = "A new job card has been added to your dashboard. Please review...";
+
+                        sendNotificationToDepartments(assignedTo, title, message);
+
                         return { projectId: result.insertId, taskId: task_result_set.insertId };
                     }else{
                         console.log("An error occurred during the execution");

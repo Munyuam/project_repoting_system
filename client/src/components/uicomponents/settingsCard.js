@@ -17,10 +17,13 @@ function SettingsCard({ onClose, onLogout }) {
         </div>
 
         <div className="px-6 py-4 space-y-5 text-sm text-gray-700">
-          <button className="w-full text-left hover:text-gray-900">General Settings</button>
+          {/* <button className="w-full text-left hover:text-gray-900">General Settings</button>
           <button className="w-full text-left hover:text-gray-900">Account Settings</button>
           <button className="w-full text-left hover:text-gray-900">Privacy & Security</button>
-          <button className="w-full text-left hover:text-gray-900">Notification Preferences</button>
+          <button className="w-full text-left hover:text-gray-900">Notification Preferences</button> */}
+          <p className="text-left hover:text-gray-500 text-md">
+             This function is under development...
+          </p>
         </div>
 
         <div className="border-t my-2"></div>

@@ -9,6 +9,7 @@ const getusers = async () => {
         u.fullName,
         u.email,
         u.departmentID,
+        u.status,
         d.departName AS departmentName
       FROM users u
       INNER JOIN departments d 

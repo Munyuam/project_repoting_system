@@ -1,46 +1,43 @@
 import pool from "../dbconnector.js";
+import bcrypt from "bcrypt";
 
 const loginDetails = async (username, password) => {
-    try {
-        const sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        const [result] = await pool.query(sql, [username, password]);
-        
-        if (result.length !== 0) {
-            const user = result[0];
-            const department_Id = user.departmentID;
+  try {
+    const [result] = await pool.query("SELECT * FROM users WHERE username = ? && status != ?", [username, 'inactive']);
 
-            const department_query = "SELECT * FROM departments WHERE departmentID = ?";
-            const [result_set] = await pool.query(department_query, [department_Id]); 
-
-            if (result_set.length !== 0) { 
-                const depart = result_set[0];
-
-                return {
-                    id: user.userID,
-                    username: user.username, 
-                    fullname: user.full_name,
-                    email: user.email,
-                    role: user.role,
-                    department_name: depart.departName,
-                    departId : depart.departmentID
-                };
-            } else {
-                return {
-                    id: user.userID,
-                    username: user.username,
-                    fullname: user.full_name,
-                    email: user.email,
-                    role: user.role,
-                    department_name: "Department Not Found",
-                    departId: "Department number Not found"
-                };
-            }
-        } else {
-            throw new Error('username or password was not found');
-        }
-    } catch (err) {
-        throw new Error('Authentication failed');
+    if (result.length === 0) {
+      throw new Error("Username or password is incorrect");
     }
-}
+
+    const user = result[0];
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      throw new Error("Username or password is incorrect");
+    }
+
+    const [deptResult] = await pool.query(
+      "SELECT * FROM departments WHERE departmentID = ?",
+      [user.departmentID]
+    );
+
+    const department = deptResult.length > 0 ? deptResult[0] : null;
+
+    return {
+      id: user.userID,
+      username: user.username,
+      _passkey: user.password, 
+      fullname: user.full_name,
+      email: user.email,
+      role: user.role,
+      department_name: department ? department.departName : "Department Not Found",
+      departId: department ? department.departmentID : "Department number Not found",
+    };
+
+  } catch (err) {
+    console.error("Login error:", err.message);
+    throw new Error("Authentication failed");
+  }
+};
 
 export default loginDetails;
