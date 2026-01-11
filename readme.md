@@ -14,11 +14,11 @@ PRS streamlines project management from start to finish, guiding projects throug
 
 ## Features
 
-- **Project Lifecycle Management** - End-to-end tracking from initiation to delivery
-- **Role-Based Access Control** - Secure permissions for different departments and users
-- **Automated Email Notifications** - Real-time alerts for project updates
-- **Multi-Department Workflow** - Seamless collaboration across teams
-- **Real-time Status Tracking** - Live updates on project progress
+- Project Lifecycle Management
+- Role-Based Access Control
+- Automated Email Notifications
+- Multi-Department Workflow
+- Real-time Status Tracking
 
 
 
