@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+
+const API = process.env.REACT_APP_API;
+
+
 const ChangePasswordCard = ({ onClose }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -27,7 +31,7 @@ const ChangePasswordCard = ({ onClose }) => {
     }
 
     try {
-      const response = await fetch("/changePassword", {
+      const response = await fetch(`${API}/changePassword`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ oldPassword, newPassword }),

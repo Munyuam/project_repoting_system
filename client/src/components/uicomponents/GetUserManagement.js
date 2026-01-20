@@ -5,6 +5,8 @@ import $ from "jquery";
 import "datatables.net-dt";
 import EditUser from "./EditUser";
 
+const API = process.env.REACT_APP_API;
+
 function GetUserManagement() {
   const notyf = new Notyf();
   const [users, setUsers] = useState([]);
@@ -19,7 +21,7 @@ function GetUserManagement() {
 
   const registerUser = async () => {
     try {
-      const response = await fetch("/registerUser", {
+      const response = await fetch(`${API}/registerUser`, {
         method: "POST",
         body: JSON.stringify(formData),
         headers: {
@@ -42,7 +44,7 @@ function GetUserManagement() {
 
   const getUsers = async () => {
     try {
-      const response = await fetch("/getUsers", { method: "GET" });
+      const response = await fetch(`${API}/getUsers`, { method: "GET" });
       if (response.ok) {
         const data = await response.json();
         setUsers(data.users);

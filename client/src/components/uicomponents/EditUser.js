@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Notyf } from "notyf";
 import { X } from "lucide-react"; 
 
+const API = process.env.REACT_APP_API;
+
+
 function EditUser({ user, onClose, onUpdate }) {
   
   const [formData, setFormData] = useState({
@@ -26,7 +29,7 @@ function EditUser({ user, onClose, onUpdate }) {
 
     if(confirm){
           try {
-        const response = await fetch('/updateProfile', {
+        const response = await fetch(`${API}/updateProfile`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
@@ -60,7 +63,7 @@ function EditUser({ user, onClose, onUpdate }) {
 
     if (confirmReset && username && userID) {
        
-        const updatePassword = await fetch('/resetPassword', {
+        const updatePassword = await fetch(`${API}/resetPassword`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

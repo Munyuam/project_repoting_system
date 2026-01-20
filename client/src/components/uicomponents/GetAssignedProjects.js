@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Notyf } from "notyf";
 import { dateFormat, getProgress, getStageName, viewStatus, newproject, session } from "../../utils/globalutils";
 
+const API = process.env.REACT_APP_API;
+
 function GetAssignedProjects() {
   const notf = new Notyf();
 
@@ -13,7 +15,7 @@ function GetAssignedProjects() {
 
   const LoadAssignedProjects = async () => {
     try {
-      const response = await fetch("/getProjects", { method: "GET" });
+      const response = await fetch(`${API}/getProjects`, { method: "GET" });
 
       if (response.ok) {
         const data = await response.json();

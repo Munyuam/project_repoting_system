@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 
+  const API = process.env.REACT_APP_API;
+
+
 function ViewInsights({ departmentName, onClose }) {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -7,7 +10,7 @@ function ViewInsights({ departmentName, onClose }) {
   useEffect(() => {
     async function fetchProject() {
       try {
-        const res = await fetch(`/getProjectStatus?department=${departmentName}`);
+        const res = await fetch(`${API}/getProjectStatus?department=${departmentName}`);
         const data = await res.json();
 
         if (data.success) {

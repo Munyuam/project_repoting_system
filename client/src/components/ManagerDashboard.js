@@ -3,13 +3,16 @@ import { dateFormat, getProgress, locator } from '../utils/globalutils';
 import ProgressBar from "@ramonak/react-progress-bar";
 import 'notyf/notyf.min.css';
 
+const API = process.env.REACT_APP_API;
+
+
 function ManagerDashBoard() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const loadProjects = async () => {
     try {
-      const response = await fetch("/getProjects", {
+      const response = await fetch(`${API}/getProjects`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

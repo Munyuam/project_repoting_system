@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Notyf } from "notyf";
 import { dateFormat, formatCash, getProgress, getStageName, session } from "../../utils/globalutils";
 
+const API = process.env.REACT_APP_API;
+
+
 function GetProjectStatus() {
   const [statuses, setStatuses] = useState([]);
   const [message, setMessage] = useState(null);
@@ -14,7 +17,7 @@ function GetProjectStatus() {
   const LoadProjectStatus = async () => {
     try {
       let query = window.location.search;
-      const response = await fetch(`/getProjectStatus${query}`);
+      const response = await fetch(`${API}/getProjectStatus${query}`);
 
       if (response.ok) {
         const data = await response.json();
@@ -50,7 +53,7 @@ function GetProjectStatus() {
     const statusdata = { status, jobcardno, assignedTo: assignedto };
 
     try {
-      const response = await fetch("/updatestatus", {
+      const response = await fetch(`${API}/updatestatus`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(statusdata),

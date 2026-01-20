@@ -3,6 +3,9 @@ import { session } from "../../utils/globalutils";
 import { Notyf } from "notyf";
 const nofy = new Notyf();
 
+const API = process.env.REACT_APP_API;
+
+
 const UserDetailsCard = ({ onClose }) => {
   const [user, setUser] = useState(null);
   const [formData, setFormData] = useState({
@@ -53,7 +56,7 @@ const UserDetailsCard = ({ onClose }) => {
     setMessage("");
 
     try {
-      const response = await fetch("/updateProfile", {
+      const response = await fetch(`${API}/updateProfile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

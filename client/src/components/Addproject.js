@@ -5,6 +5,7 @@ import 'notyf/notyf.min.css';
 import { ClipLoader } from 'react-spinners';
 
 const notfy = new Notyf();
+  const API = process.env.REACT_APP_API;
 
 function Addproject() {
   const generateJobCardNo = () => {
@@ -74,7 +75,7 @@ function Addproject() {
       setLoading(true)
       const postProject = async () => {
         try {
-          const response = await fetch('/projectInit', {
+          const response = await fetch(`${API}/projectInit`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)

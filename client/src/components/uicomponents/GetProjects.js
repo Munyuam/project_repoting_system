@@ -9,6 +9,9 @@ import {
   session,
 } from "../../utils/globalutils";
 
+const API = process.env.REACT_APP_API;
+
+
 function GetProjects() {
   const [projects, setProjects] = useState([]);
   const [search, setSearch] = useState("");
@@ -18,7 +21,7 @@ function GetProjects() {
 
   const loadProjects = async () => {
     try {
-      const response = await fetch("/getProjects");
+      const response = await fetch(`${API}/getProjects`);
       if (response.ok) {
         const data = await response.json();
         const activeProjects = data.filter(

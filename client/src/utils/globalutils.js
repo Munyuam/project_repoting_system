@@ -3,9 +3,12 @@ import 'notyf/notyf.min.css';
 import Studio from '../department/Studio'; 
 const notf = new Notyf();
 
+  const API = process.env.REACT_APP_API;
+
+
 const fetchUser = async () => {
   try {
-    const user = await fetch('/getSession', {
+    const user = await fetch(`${API}/getSession`, {
       method: 'GET',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -264,7 +267,7 @@ const locator = {
 
   logout: async () => {
     try {
-      const response = await fetch('/logout', { method: 'GET' });
+      const response = await fetch(`${API}/logout`, { method: 'GET' });
       if (response.ok) {
         notf.success('Logout Successfully');
         setTimeout(() => {

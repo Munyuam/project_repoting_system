@@ -16,11 +16,13 @@ function GetCompleted() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+    
+  const API = process.env.REACT_APP_API;
 
   const LoadProjectStatus = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/getCompleted', { method: 'GET' });
+      const response = await fetch(`${API}/getCompleted`, { method: 'GET' });
       if (response.ok) {
         const completedProjects = await response.json();
         setCompleted(completedProjects);

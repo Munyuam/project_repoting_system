@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { getProgress, newproject, dateFormat } from "../../utils/globalutils";
 import { Notyf } from "notyf";
 
+const API = process.env.REACT_APP_API;
+
+
 function GetPending() {
   const [pendings, setPendings] = useState([]);
   const [loadingApprove, setLoadingApprove] = useState(null);
@@ -11,7 +14,7 @@ function GetPending() {
 
   const loadPendings = async () => {
     try {
-      const response = await fetch("/getProjects", {
+      const response = await fetch(`${API}/getProjects`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -45,7 +48,7 @@ function GetPending() {
       
       setLoadingApprove(proId);
 
-      const response = await fetch("/approvProject", {
+      const response = await fetch(`${API}/approvProject`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,7 +81,7 @@ function GetPending() {
       
       setLoadingReject(proId);
 
-      const response = await fetch("/rejectProject", {
+      const response = await fetch(`${API}/rejectProject`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

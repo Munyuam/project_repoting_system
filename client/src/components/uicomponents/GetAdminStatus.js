@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import ProgressBar from "@ramonak/react-progress-bar";
 import { dateFormat, formatCash, getProgress, getStageName } from "../../utils/globalutils";
 
+const API = process.env.REACT_APP_API;
+
 function GetAdminStatus() {
   const [statuses, setStatuses] = useState([]);
   const [message, setMessage] = useState("");
@@ -9,7 +11,7 @@ function GetAdminStatus() {
 
   async function LoadAdminStatus() {
     try {
-      const res = await fetch("/getAdminProjectStatus");
+      const res = await fetch(`${API}/getAdminProjectStatus`);
       const data = await res.json();
 
       if (!res.ok) {

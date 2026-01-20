@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import NotificationDetailsCard from "./NotDetailsCard";
 import { session } from "../../utils/globalutils";
 
+const API = process.env.REACT_APP_API;
+
 const NotificationCard = ({ onClose }) => {
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [department, setDepartment] = useState(null);
@@ -17,7 +19,7 @@ const NotificationCard = ({ onClose }) => {
 
         if (!sess.departmentId) return;
 
-        const response = await fetch("/getNotifications");
+        const response = await fetch(`${API}/getNotifications`);
         const data = await response.json();
 
         if (data.success) {
@@ -50,7 +52,7 @@ const NotificationCard = ({ onClose }) => {
 
   const markAsRead = async (notificationID) => {
   try {
-    const response = await fetch("/markAsRead", {
+    const response = await fetch(`${API}/markAsRead`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ notificationID }),
@@ -74,7 +76,7 @@ const NotificationCard = ({ onClose }) => {
 
 const markAllAsRead = async () => {
   try {
-    const response = await fetch("/markAllAsRead", {
+    const response = await fetch(`${API}/markAllAsRead`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
