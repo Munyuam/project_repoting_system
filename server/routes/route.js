@@ -39,6 +39,10 @@ router.post("/login", async (req, res) => {
         req.session.status = users.status;
         req.session.department_name = users.department_name;
         req.session.departId = users.departId;
+
+        console.log("Session after login:", req.session);
+        console.log("Session ID:", req.sessionID);
+
         
         req.session.save((err) => {
            
@@ -67,31 +71,6 @@ router.post("/login", async (req, res) => {
             });
         }
     }
-});
-
-router.get('/Admin', async (req, res) => {
-    const userID = req.session.userid;
-    const userDepartment = req.session.department_name; 
-    const userDepartmentID = req.session.departId;
-
-    if(!userID){
-        return res.status(401).json({
-            error: "Access to this Resource is Restricted. Please Login",
-            sessionData: req.session 
-        });
-    }
-
-    if(userDepartment !== 'Administration'){
-        return res.status(403).json({
-            error: "Access to this Resource is Restricted to Administrators only",
-            sessionData: req.session
-        });
-    }
-
-    res.json({
-        success: true,
-        sessionData: req.session,
-    });
 });
 
 router.get('/Management', async (req, res) => {
@@ -415,6 +394,8 @@ router.post('/registerUser', async (req, res) => {
 });
 
 router.get('/Admin', async (req, res) => {
+  console.log("SESSION ID:", req.sessionID);
+  console.log("SESSION ID:", req.sessionID);
     const userID = req.session.userid;
     const userDepartment = req.session.department_name; 
     const username = req.session.username;
@@ -442,8 +423,14 @@ router.get('/Admin', async (req, res) => {
 
 
 router.get('/studio', async (req, res) => { 
+    console.log("SESSION ID:", req.sessionID);
+    console.log("Session ID on studio:", req.sessionID);
+    console.log("Session object:", req.session);
+
     const userID = req.session.userid;
     const userDepartment = req.session.department_name; 
+
+    console.log("userID: "+ req.session.userid);
 
     if(!userID){
         return res.status(401).json({

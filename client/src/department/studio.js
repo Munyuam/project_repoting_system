@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import DeptDashboard from "../components/DeptDashboard";
+const API = process.env.REACT_APP_API;
 
 function Studio() {
   const [user, setUser] = useState(null);
@@ -10,7 +11,7 @@ function Studio() {
 
   const getUser = async () => {
     try {
-      const response = await fetch("/studio", { method: "GET" });
+      const response = await fetch(`${API}/studio`, { method: "GET", credentials: 'include'});
 
       if (response.ok) {
         const result = await response.json();

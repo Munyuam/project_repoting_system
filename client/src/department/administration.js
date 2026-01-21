@@ -3,6 +3,8 @@ import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import AdminDashBoard from '../components/AdminDashBoard';
 import 'notyf/notyf.min.css';
+const API = process.env.REACT_APP_API;
+
 
 function Administration() { 
   const [user, setUser] = useState(null);
@@ -11,7 +13,7 @@ function Administration() {
 
   const fetchData = async () => {  
     try {
-      const response = await fetch('/Admin', {
+      const response = await fetch(`${API}/Admin`, {
         method: 'GET',
         credentials: 'include' 
       });

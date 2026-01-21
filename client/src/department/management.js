@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import ManagerDashBoard from "../components/ManagerDashboard";
+const API = process.env.REACT_APP_API;
 
 
 
@@ -13,7 +14,7 @@ function Management() {
   const getUser = async () => {
 
     try {
-      const response = await fetch("/Management", { method: "GET" });
+      const response = await fetch(`${API}/Management`, { method: "GET" });
 
       if (response.ok) {
         const result = await response.json();

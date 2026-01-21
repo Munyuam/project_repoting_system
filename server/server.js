@@ -20,15 +20,18 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use(session({
+  name: "sid", // important (stable cookie name)
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, 
+    secure: false,          // true ONLY if HTTPS
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 
+    sameSite: "lax",        // 🔑 REQUIRED
+    maxAge: 24 * 60 * 60 * 1000
   }
 }));
+
 
 app.use("/", route);
 

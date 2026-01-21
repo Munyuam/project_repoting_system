@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import DeptDashboard from "../components/DeptDashboard";
+const API = process.env.REACT_APP_API;
+
 
 function Warehouse() {
   const [user, setUser] = useState(null);
@@ -10,7 +12,7 @@ function Warehouse() {
 
   const getUser = async () => {
     try {
-      const response = await fetch("/warehouse", { method: "GET" });
+      const response = await fetch(`${API}/warehouse`, { method: "GET" });
 
       if (response.ok) {
         const result = await response.json();

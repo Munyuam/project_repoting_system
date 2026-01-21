@@ -48,7 +48,6 @@ const loadProjects = async () => {
     })
   );
 
-  console.log("These are all Projects:", allProjects);
   return allProjects;
 };
 
